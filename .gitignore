@@ -1,0 +1,5 @@
+#python
+*.py[co]
+
+# sublime
+*.sublime-*
