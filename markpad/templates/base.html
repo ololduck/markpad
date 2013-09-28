@@ -3,13 +3,15 @@
     <head>
         <title>tpassist</title>
         <link rel="stylesheet" href="/static/screen.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
     </head>
     <body>
         <div id="content">
-            {% block content %}
+            {% block content %}{% endblock %}
         </div>
         <div id="footer">
             <p>tpassist. for help, go <a href="/help">here</a>. made by <a href="http://paulollivier.fr">paul ollivier</a>, in python, with the <a href="#">flask</a> microframework. with love.</p>
         </div>
+        {% block script %}{% endblock %}
     </body>
 </html>

@@ -13,7 +13,7 @@ MARKDOWN_EXTS = [
 if("DATABASE_URL" in os.environ):
     SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
 else:
-    dbpath = os.path.join(basedir, 'tpassist.db')
+    dbpath = os.path.join(basedir, 'markdown.db')
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + dbpath
 
 if("SECRET_KEY" in os.environ):

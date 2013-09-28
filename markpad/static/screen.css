@@ -1,0 +1,21 @@
+body {
+  width: 100%;
+  background-color: #333333;
+  color: #cccccc; }
+
+#footer {
+  font-size: 0.6em;
+  font-style: italic;
+  padding-left: auto;
+  padding-right: auto; }
+
+h1 {
+  color: white; }
+
+#md-edit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 95%; }

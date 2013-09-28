@@ -1,6 +1,6 @@
 from flask import render_template, redirect, request, session, abort
 
-from tpassist import app, models, logger
+from markpad import app, models, logger
 
 @app.route('/')
 def home():

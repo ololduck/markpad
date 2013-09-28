@@ -1,6 +1,6 @@
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
-from tpassist import config
+from markpad import config
 
 
 app = Flask(__name__)
@@ -9,9 +9,8 @@ logger = app.logger
 
 db = SQLAlchemy(app)
 
-from tpassist import views
-from tpassist import models
-from tpassist import base_pages
+from markpad import views
+from markpad import models
 
 
 def init_db():

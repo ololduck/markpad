@@ -1,19 +1,20 @@
 import markdown
 import random
 import datetime
-from tpassist import db, app, logger
+from markpad import db, app, logger
 from sqlalchemy.exc import OperationalError
 
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 'n', 'o','p','q', 'r', 's', 't', 'u', 'v','w', 'x', 'y', 'z']
 alphabet.append([l.upper() for l in alphabet])
 
-def create_document():
+def new_document():
     doc = Document()
     doc.created_on = doc.last_modified_on = datetime.datetime.utcnow()
     doc.url_id = gen_url()
     doc.md_content = ""
     doc.save()
+    return doc
 
 def gen_url():
     "Generate a string corresponding to [a-zA-Z]{10}"

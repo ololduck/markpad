@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="md-edit"></div>
+<div id="md-preview"></div>
+{% endblock %}
+
+{% block script %}
+<script>
+    var editor = ace.edit("md-edit");
+    editor.setTheme("ace/theme/twilight");
+    editor.getSession().setMode("ace/mode/markdown");
+</script>
+{% endblock %}
