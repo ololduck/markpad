@@ -1,5 +1,8 @@
 #python
 *.py[co]
 
+# virtualenv
+venv
+
 # sublime
 *.sublime-*
