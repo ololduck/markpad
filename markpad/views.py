@@ -1,4 +1,5 @@
-from flask import render_template, redirect, request, session, abort
+import json
+from flask import render_template, redirect, request, session, abort, url_for
 
 from markpad import app, models, logger
 
@@ -11,7 +12,7 @@ def home():
 def doc_new():
     "Creates a new document, and redirects to his URL"
     doc = models.new_document()
-    return redirect('/{0}/edit'.format(doc.url_id))
+    return redirect(url_for("doc_edit", doc_id=doc.url_id))
 
 @app.route('/<doc_id>/edit')
 def doc_edit(doc_id):
@@ -36,4 +37,13 @@ def download(doc_id):
 @app.route('/<doc_id>/update', methods=['POST'])
 def doc_update(doc_id):
     "JSON endpoint for document updates. I still have to define protocol."
-    pass
+    assert(request.method == 'POST')
+    doc = models.get_document(doc_id)
+    assert(request.json.get('data', None) is not None)
+    try:
+        doc.update(request.json['data'])
+    except KeyError as e:
+        logger.warn(
+                "could not access key 'data' in request {request}: {error}".format(
+                    request=request, error=e))
+    return json.dumps({"render":doc.render()})

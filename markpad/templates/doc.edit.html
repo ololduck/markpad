@@ -2,13 +2,32 @@
 
 {% block content %}
 <div id="md-edit"></div>
-<div id="md-preview"></div>
+<div id="md-preview">{{doc.render()|safe}}</div>
 {% endblock %}
 
 {% block script %}
 <script>
+    function send_microcommit(e) {
+        $.ajax({
+            type: "POST",
+            url: "/{{doc.url_id}}/update",
+            data: JSON.stringify(e, null, '\t'),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data){
+                console.log("success: " + data);
+                $("#md-preview").html(data.render);
+            },
+            failure: function(data) {
+                console.error("failure! " + data);
+            }
+        });
+        console.log(JSON.stringify(e.data));
+    }
     var editor = ace.edit("md-edit");
     editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/markdown");
+    editor.setValue([{% for line in doc.md_content.encode().splitlines() %}"{{line}}", {%endfor%}].join("\n"));
+    editor.getSession().on('change', send_microcommit);
 </script>
 {% endblock %}
