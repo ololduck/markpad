@@ -27,7 +27,7 @@
     var editor = ace.edit("md-edit");
     editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/markdown");
-    editor.setValue([{% for line in doc.md_content.encode().splitlines() %}"{{line}}", {%endfor%}].join("\n"));
+    editor.setValue([{% for line in doc.md_content.decode('utf-8').splitlines() %}"{{line}}", {%endfor%}].join("\n"));
     editor.getSession().on('change', send_microcommit);
 </script>
 {% endblock %}

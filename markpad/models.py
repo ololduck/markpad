@@ -12,16 +12,16 @@ alphabet.append([l.upper() for l in alphabet])
 def new_document():
     doc = Document()
     doc.created_on = doc.last_modified_on = datetime.datetime.utcnow()
-    doc.url_id = gen_url()
+    doc.url_id = gen_random_str(app.config.get('URL_ID_LEN', 10))
     doc.md_content = ""
     doc.save()
     return doc
 
-def gen_url():
+def gen_random_str(nbr_chars=10):
     "Generate a string corresponding to [a-zA-Z]{10}"
     return "".join(
             [random.choice(alphabet) for i in xrange(1,
-                app.config.get('DOC_ID_SIZE', 10))])
+                nbr_chars)])
 
 def get_document(doc_id):
     return Document.query.filter_by(url_id=doc_id).first()
@@ -77,9 +77,11 @@ class Document(db.Model):
                     'codehilite',
                     'admonition'
                     ]))
+
     def update(self, micro_commit):
         apply_microcommit(self, micro_commit)
         self.save()
+
 
 class ValidationError(Exception):
     pass

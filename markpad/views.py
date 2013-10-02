@@ -1,5 +1,5 @@
 import json
-from flask import render_template, redirect, request, session, abort, url_for
+from flask import flash, render_template, redirect, request, session, abort, url_for
 
 from markpad import app, models, logger
 
@@ -17,6 +17,16 @@ def doc_new():
 @app.route('/<doc_id>/edit')
 def doc_edit(doc_id):
     "Main page to edit a document"
+    if(doc_id not in app.deltas):
+        app.deltas[doc_id] = []
+
+    if('client_id' not in session):
+        session['client_id'] = models.gen_random_str(32)
+        app.client_states.update({
+            session['client_id']: {
+                doc_id: len(app.deltas[doc_id]) - 1
+            }
+        })
     doc = models.get_document(doc_id)
     return render_template('doc.edit.html', doc=doc)
 
@@ -37,13 +47,21 @@ def download(doc_id):
 @app.route('/<doc_id>/update', methods=['POST'])
 def doc_update(doc_id):
     "JSON endpoint for document updates. I still have to define protocol."
-    assert(request.method == 'POST')
     doc = models.get_document(doc_id)
-    assert(request.json.get('data', None) is not None)
+    if('client_id' not in session):
+        flash("an error occured. Please contact <contact@paullollivier.fr>, with all the information you can provide. Please do not forget to include the exact time at which this occured.")
+        logger.error("on /update, we don't have any client_id information. document: {doc_id}".format(doc_id=doc_id))
+        return abort()
+    deltas_to_send = app.deltas[doc_id][
+            app.client_states[session['client_id']][doc_id]:
+            ]
+    app.client_states[session['client_id'][doc_id]] = len(app.deltas[doc_id])   
     try:
         doc.update(request.json['data'])
-    except KeyError as e:
+    except KeyError as err:
         logger.warn(
-                "could not access key 'data' in request {request}: {error}".format(
-                    request=request, error=e))
-    return json.dumps({"render":doc.render()})
+                "could not access key 'data' in request {request}: {error}".format(request=request, error=err))
+    return json.dumps({
+            "events": deltas_to_send,
+            "render":doc.render()
+            })

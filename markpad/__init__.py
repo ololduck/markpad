@@ -7,6 +7,10 @@ app = Flask(__name__)
 app.config.from_object(config)
 logger = app.logger
 
+app.deltas = {}
+app.client_states = {}
+app.current_serial_id = 0
+
 db = SQLAlchemy(app)
 
 from markpad import views

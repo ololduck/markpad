@@ -51,3 +51,36 @@ This gives us the following json response:
 }
 ```
 
+## Inner event storage
+
+We need to store events for as long as we haven't sent them to all the clients. At least as long as the server is alive.
+
+I propose to include to the `app` object two new properties: `app.deltas` and `app.client_states`. Their structure will be as follows.
+
+### `app.deltas`
+
+```json
+{
+    "documentid1": [
+        {"event": 1},
+        {"event": 2},
+        ...
+    ],
+    "documentid2": [
+        {"event": 1},
+        ...
+    ]
+}
+```
+
+### `app.client_states
+
+```json
+{
+    "client_id1_stored_in_session_dict": {
+        "document_id1": "int representing the last accessed app.deltas['document_id']",
+        "document_id2": "..."
+    },
+    "client_id2_stored_in_session_dict": "..."
+}
+```

@@ -1,9 +1,55 @@
 $base_color : #333
 
+$code_color: #900
+
+@mixin code
+    background: none repeat scroll 0 0 #F8F8F8
+    border: 1px solid #CCCCCC
+    font-family: Monospace
+    border-radius: 4px 4px 4px 4px
+
+@mixin admonition-base($color)
+    border:
+        top: 1px solid darken($color, 20%)
+        bottom: 1px solid darken($color, 20%)
+    background-color: $color
+    padding:
+        left: 10px
+    margin:
+        top: 5px
+        bottom: 5px
+    p
+        margin:
+            top: 2px
+            bottom: 2px
+        color: darken($color, 30%)
+    .admonition-title
+        font-weight: bold
+        font-size: 1.1em
+        color: darken($color, 40%)
+
+
+.attention, .caution, .warning
+    @include admonition-base(#FFCD42)
+
+.note, .tip, .hint
+    @include admonition-base(#E8E8FF)
+
+.danger, .error, .important
+    @include admonition-base(#e03333)
+
+.codehilite
+    @include code
+    padding:
+        left: 10px
+        right: 10px
+
+
 body
+    font-family: Sans-serif
     width: 100%
     background-color: $base_color
-    color: lighten($base_color, 60%)
+    color: lighten($base_color, 50%)
 
 #footer
     font-size: 0.6em
@@ -14,6 +60,10 @@ body
 
 h1
     color: lighten($base_color, 90%)
+
+h2
+    color: lighten($base_color, 80%)
+    border-bottom: solid lighten($base_color, 65%) 1px
 
 #md-edit
     position: absolute
