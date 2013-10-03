@@ -10,13 +10,7 @@ MARKDOWN_EXTS = [
     'admonition'
 ]
 
-if("DATABASE_URL" in os.environ):
-    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
-else:
-    dbpath = os.path.join(basedir, 'markdown.db')
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + dbpath
+SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL",
+    'sqlite:///' + os.path.join(basedir, 'markpad.db'))
 
-if("SECRET_KEY" in os.environ):
-    SECRET_KEY = os.environ["SECRET_KEY"]
-else:
-    SECRET_KEY = "super-secret-of-death"
+SECRET_KEY = os.environ.get("SECRET_KEY", 'super-secret-of-death')

@@ -8,6 +8,8 @@
 {% block script %}
 <script>
     function send_microcommit(e) {
+        if(!e)
+            return;
         $.ajax({
             type: "POST",
             url: "/{{doc.url_id}}/update",
@@ -15,8 +17,9 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function(data){
-                console.log("success: " + data);
-                $("#md-preview").html(data.render);
+                console.log(data);
+                update_render(data.render);
+                handle_recvd_events(data.events);
             },
             failure: function(data) {
                 console.error("failure! " + data);
@@ -24,10 +27,38 @@
         });
         console.log(JSON.stringify(e.data));
     }
+    function update_render(render) {
+        $("#md-preview").html(render);
+    }
+
+
     var editor = ace.edit("md-edit");
     editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/markdown");
-    editor.setValue([{% for line in doc.md_content.decode('utf-8').splitlines() %}"{{line}}", {%endfor%}].join("\n"));
+    editor.setValue([{% for line in doc.md_content.splitlines() %}"{{line}}", {%endfor%}].join("\n"));
     editor.getSession().on('change', send_microcommit);
+
+    function handle_recvd_events(events) {
+        editor.getSession().redoChanges(events, true);
+    }
+
+    (function worker(){
+        console.log("worker called");
+        $.ajax({
+            type: "POST",
+            url: '/{{doc.url_id}}/update',
+            success: function(data) {
+                if(data.events) {
+                    console.log("I will try to handle the following events:" + data.events);
+                    handle_recvd_events(data.events);
+                }
+                update_render(data.render);
+            },
+            complete: function() {
+                // Schedule the next request when the current one's complete
+                setTimeout(worker, 1000);
+            }
+        });
+    })();
 </script>
 {% endblock %}

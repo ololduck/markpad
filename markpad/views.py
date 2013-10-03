@@ -12,6 +12,7 @@ def home():
 def doc_new():
     "Creates a new document, and redirects to his URL"
     doc = models.new_document()
+    logger.info("New document {doc_id} has been created".format(doc_id=doc.url_id))
     return redirect(url_for("doc_edit", doc_id=doc.url_id))
 
 @app.route('/<doc_id>/edit')
@@ -27,6 +28,10 @@ def doc_edit(doc_id):
                 doc_id: len(app.deltas[doc_id]) - 1
             }
         })
+    if(session['client_id'] not in app.client_states):
+        app.client_states.update({session['client_id']:{}})
+    if(doc_id not in app.client_states[session['client_id']]):
+        app.client_states[session['client_id']][doc_id] = len(app.deltas[doc_id])
     doc = models.get_document(doc_id)
     return render_template('doc.edit.html', doc=doc)
 
@@ -53,14 +58,12 @@ def doc_update(doc_id):
         logger.error("on /update, we don't have any client_id information. document: {doc_id}".format(doc_id=doc_id))
         return abort()
     deltas_to_send = app.deltas[doc_id][
-            app.client_states[session['client_id']][doc_id]:
-            ]
-    app.client_states[session['client_id'][doc_id]] = len(app.deltas[doc_id])   
-    try:
+        app.client_states[session['client_id']][doc_id]:
+    ]
+    app.client_states[session['client_id']][doc_id] = len(app.deltas[doc_id])   
+    if(request.json):
         doc.update(request.json['data'])
-    except KeyError as err:
-        logger.warn(
-                "could not access key 'data' in request {request}: {error}".format(request=request, error=err))
+
     return json.dumps({
             "events": deltas_to_send,
             "render":doc.render()
