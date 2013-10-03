@@ -7,6 +7,8 @@
 
 {% block script %}
 <script>
+    //TODO: make it failing connection resilient. ei. store the events in a var, and send all of them when connection is available.
+
     function send_microcommit(e) {
         if(!e)
             return;

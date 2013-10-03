@@ -7,3 +7,4 @@ SQLAlchemy==0.7.9
 gunicorn==17.5
 Flask-WTF==0.8.4
 WTForms==1.0.4
+psycopg2
