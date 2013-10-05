@@ -8,6 +8,10 @@ def home():
     "This will render a nice image, with a 'create a new document' button"
     return render_template('home.html')
 
+@app.route('/help')
+def help():
+    return render_template('help.html')
+
 @app.route('/new')
 def doc_new():
     "Creates a new document, and redirects to his URL"

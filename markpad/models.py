@@ -28,7 +28,6 @@ def get_document(doc_id):
 def apply_microcommit(doc, mc):
     logger.info(json.dumps(mc, indent=4))
     d = doc.md_content.splitlines()
-    print(d)
     start_pos = {'col': mc['range']['start']['column'], 'row': mc['range']['start']['row']}
     end_pos = {'col': mc['range']['end']['column'], 'row': mc['range']['end']['row']}
     if(mc['action'] == 'insertText'):
