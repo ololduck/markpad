@@ -20,7 +20,7 @@ def help():
 def doc_new():
     "Creates a new document, and redirects to his URL"
     doc = models.new_document()
-    logger.info("New document {doc_id} has been created".format(doc_id=doc.url_id))
+    logger.info("New document '{doc_id}' has been created".format(doc_id=doc.url_id))
     return redirect(url_for("doc_edit", doc_id=doc.url_id))
 
 @app.route('/<doc_id>/edit')

@@ -15,16 +15,18 @@ app.current_serial_id = 0
 
 db = SQLAlchemy(app)
 
-if os.environ.get('HEROKU') is not None:
-    stream_handler = logging.StreamHandler()
-    app.logger.addHandler(stream_handler)
-    app.logger.setLevel(logging.INFO)
-    app.logger.info('Heroku deployment startup')
+def init_db():
+    db.create_all()
+    logger.info("created/updated database")
+
+stream_handler = logging.StreamHandler()
+logger.addHandler(stream_handler)
+logger.setLevel(logging.INFO)
+logger.info('markpad starting up...')
+init_db()
 
 from markpad import views
 from markpad import models
 
+logger.info("markpad started")
 
-def init_db():
-    db.create_all()
-    logger.info("created a new database")
