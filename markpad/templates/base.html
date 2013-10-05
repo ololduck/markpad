@@ -3,9 +3,9 @@
     <head>
         <meta charset="utf-8">
         <title>Markpad</title>
-        <link rel="stylesheet" href="/static/screen.css">
-        <link rel="stylesheet" href="/static/pygments.css">
-        <script src="/static/jquery.min.js"></script>
+        <link rel="stylesheet" href="url_for('static', filename='screen.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='pygments.css')}}">
+        <script src="{{url_for('static', filename='jquery.min.js')}}"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
     </head>
     <body>
@@ -13,7 +13,7 @@
             {% block content %}{% endblock %}
         </div>
         <div id="footer">
-            <p>tpassist. for help, go <a href="/help">here</a>. made by <a href="http://paulollivier.fr">paul ollivier</a>, in python, with the <a href="#">flask</a> microframework. with love.</p>
+            <p>markpad. for help, go <a href="{{url_for('help')}}">here</a>. made by <a href="http://paulollivier.fr">paul ollivier</a>, in python, with the <a href="#">flask</a> microframework. with love.</p>
         </div>
         {% block script %}{% endblock %}
     </body>
