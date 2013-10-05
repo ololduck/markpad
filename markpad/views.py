@@ -8,6 +8,10 @@ def home():
     "This will render a nice image, with a 'create a new document' button"
     return render_template('home.html')
 
+@app.route('/favicon.<ext>')
+def favicon(ext):
+    return 404
+
 @app.route('/help')
 def help():
     return render_template('help.html')
