@@ -15,18 +15,18 @@ app.current_serial_id = 0
 
 db = SQLAlchemy(app)
 
-def init_db():
-    db.create_all()
-    logger.info("created/updated database")
-
 stream_handler = logging.StreamHandler()
 logger.addHandler(stream_handler)
 logger.setLevel(logging.INFO)
 logger.info('markpad starting up...')
-init_db()
 
 from markpad import views
 from markpad import models
 
+def init_db():
+    db.create_all()
+    logger.info("created/updated database")
+
+init_db()
 logger.info("markpad started")
 
