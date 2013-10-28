@@ -27,6 +27,7 @@ def init_db():
     db.create_all()
     logger.info("created/updated database")
 
+logger.debug("initiating DB connection")
 init_db()
 logger.info("markpad started")
 
