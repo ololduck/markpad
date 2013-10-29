@@ -14,3 +14,4 @@ SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL",
     'sqlite:///' + os.path.join(basedir, 'markpad.db'))
 
 SECRET_KEY = os.environ.get("SECRET_KEY", 'super-secret-of-death')
+HOST_URL = 'localhost:5000'

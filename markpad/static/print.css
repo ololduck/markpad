@@ -47,8 +47,8 @@
     color: #3e0909; }
 
 .codehilite {
-  background: none repeat scroll 0 0 #666666;
-  border: 1px solid black;
+  background: none repeat scroll 0 0 #f2f2f2;
+  border: 1px solid #cccccc;
   font-family: Monospace;
   border-radius: 4px 4px 4px 4px;
   padding-left: 10px;
@@ -58,8 +58,8 @@
 body {
   font-family: Sans-serif;
   width: 100%;
-  background-color: #333333;
-  color: #b3b3b3; }
+  background-color: white;
+  color: black; }
 
 #footer {
   font-size: 0.6em;
@@ -68,11 +68,11 @@ body {
   padding-right: auto; }
 
 h1 {
-  color: white; }
+  color: #333333; }
 
 h2 {
-  color: #e6e6e6;
-  border-bottom: solid #cccccc 1px; }
+  color: #1a1a1a;
+  border-bottom: solid #333333 1px; }
 
 #md-edit {
   position: absolute;

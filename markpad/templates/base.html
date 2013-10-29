@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <title>Markpad</title>
-        <link rel="stylesheet" href="{{url_for('static', filename='screen.css')}}">
-        <link rel="stylesheet" href="{{url_for('static', filename='pygments.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename=request.args.get('stylesheet', 'screen') + '.css')}}">
+        <link rel="stylesheet" href="{{url_for('static', filename='pygments_' + request.args.get('stylesheet', 'screen') + '.css')}}">
         <script src="{{url_for('static', filename='jquery.min.js')}}"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
     </head>
@@ -12,9 +12,11 @@
         <div id="content">
             {% block content %}{% endblock %}
         </div>
+        {% block footer %}
         <div id="footer">
             <p>markpad. for help, go <a href="{{url_for('help')}}">here</a>. made by <a href="http://paulollivier.fr">paul ollivier</a>, in python, with the <a href="#">flask</a> microframework. with love.</p>
         </div>
+        {% endblock %}
         {% block script %}{% endblock %}
     </body>
 </html>

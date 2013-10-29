@@ -9,6 +9,8 @@
     -->
 </div>
 <div id="rendered-markdown">
-    {{ rendered_md }}
+    {{ rendered_md|safe }}
 </div>
 {% endblock %}
+
+{% block footer %}{%endblock%}

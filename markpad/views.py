@@ -1,5 +1,5 @@
 import json
-from flask import flash, render_template, redirect, request, session, abort, url_for
+from flask import flash, stream_with_context, render_template, redirect, Response, request, session, abort, url_for
 
 from markpad import app, models, logger
 
@@ -55,7 +55,33 @@ def doc_view(doc_id):
 
 @app.route('/<doc_id>/dl/pdf')
 def download(doc_id):
-    pass
+    def generate():
+        filename = gen_pdf_file(doc_id)
+        with open(filename, 'rb') as f:
+            data = f.read()
+            yield data
+    return Response(stream_with_context(generate()),
+            mimetype='application/pdf',
+            headers={
+                "Content-Disposition": "attachment;filename=%s.pdf" % doc_id
+                }
+            )
+
+import subprocess
+import tempfile
+def gen_pdf_file(doc_id):
+    cmd = []
+    cmd.append('wkhtmltopdf')
+    cmd.append('http://{host_url}/{doc_id}?stylesheet=print'.format(host_url=app.config.get('HOST_URL', 'localhost'), doc_id=doc_id))
+    fname = '{tmpdir}/{doc_id}.pdf'.format(tmpdir=tempfile.gettempdir(), doc_id=doc_id)
+    cmd.append(fname)
+    logger.debug(cmd)
+    try:
+        subprocess.check_call(cmd)
+        logger.info("generated {fname}".format(fname=fname))
+    except subprocess.CalledProcessError as error:
+        logger.error("Error trying to generate pdf file with command '{cmd}': {error}".format(error=error, cmd=error.cmd))
+    return fname
 
 @app.route('/<doc_id>/update', methods=['POST'])
 def doc_update(doc_id):

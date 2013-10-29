@@ -1,10 +1,10 @@
-$base_color : #333
+$base_color : #fff
 $code_color: #900
-$txt_color: lighten($base_color, 50%)
+$txt_color: #000
 
 
 @mixin code
-    background: none repeat scroll 0 0 lighten($base_color, 20%)
+    background: none repeat scroll 0 0 darken($base_color, 5%)
     border: 1px solid darken($base_color, 20%)
     font-family: Monospace
     border-radius: 4px 4px 4px 4px
@@ -62,11 +62,11 @@ body
         right: auto
 
 h1
-    color: lighten($txt_color, 30%)
+    color: lighten($txt_color, 20%)
 
 h2
-    color: lighten($txt_color, 20%)
-    border-bottom: solid lighten($txt_color, 10%) 1px
+    color: lighten($txt_color, 10%)
+    border-bottom: solid lighten($txt_color, 20%) 1px
 
 #md-edit
     position: absolute

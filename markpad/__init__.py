@@ -17,7 +17,10 @@ db = SQLAlchemy(app)
 
 stream_handler = logging.StreamHandler()
 logger.addHandler(stream_handler)
-logger.setLevel(logging.INFO)
+if(app.debug):
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.INFO)
 logger.info('markpad starting up...')
 
 from markpad import views
