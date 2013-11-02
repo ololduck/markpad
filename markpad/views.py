@@ -1,7 +1,9 @@
 import json
+from base64 import standard_b64encode, standard_b64decode
 from flask import flash, stream_with_context, render_template, redirect, Response, request, session, abort, url_for
+from werkzeug import secure_filename
 
-from markpad import app, models, logger
+from markpad import app, db, models, logger
 
 @app.route('/')
 def home():
@@ -10,7 +12,7 @@ def home():
 
 @app.route('/favicon.<ext>')
 def favicon(ext):
-    return 404
+    return "", 404
 
 @app.route('/help')
 def help():
@@ -43,6 +45,31 @@ def doc_edit(doc_id):
     doc = models.get_document(doc_id)
     return render_template('doc.edit.html', doc=doc)
 
+@app.route('/<doc_id>/upload_file', methods=['GET', 'POST'])
+def upload(doc_id):
+    if(request.method == 'POST'):
+        upload = request.files['file']
+        if(upload):
+            filename = secure_filename(upload.filename)
+            binary_file = models.BinaryDocumentContent()
+            binary_file.name = filename
+            binary_file.mimetype = upload.mimetype
+            if(app.config.get('IS_SQLITE', False)):
+                binary_file.data = standard_b64encode(upload.stream.read())
+            else:
+                binary_file.data = upload.stream.read()
+            upload.stream.flush()
+            binary_file.document_id = doc_id
+            binary_file.save()
+            flash("file '{filename}' has successfully uploaded".format(filename=filename), 'info')
+        else:
+            logger.warning("upload error")
+            return "Error 500", 500
+    return render_template('file_upload.html', doc_id=doc_id)
+
+        
+
+
 @app.route('/<doc_id>')
 def doc_view(doc_id):
     """
@@ -66,6 +93,15 @@ def download(doc_id):
                 "Content-Disposition": "attachment;filename=%s.pdf" % doc_id
                 }
             )
+
+@app.route('/<doc_id>/img/<fname>')
+def image(doc_id, fname):
+    bin_file = models.BinaryDocumentContent.query.filter_by(document_id=doc_id, name=fname).first()
+    if(bin_file is None):
+        return "404 Error", 404
+    if(app.config.get('IS_SQLITE', False)):
+        return Response(stream_with_context(standard_b64decode(bin_file.data)), mimetype=bin_file.mimetype)
+    return Response(stream_with_context(bin_file.data), mimetype=bin_file.mimetype)
 
 import subprocess
 import tempfile

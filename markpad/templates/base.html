@@ -9,6 +9,16 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.01/ace.js"></script>
     </head>
     <body>
+        <div id="flash">
+            {% with messages = get_flashed_messages(with_categories = true) %}
+                {% for cat, message in messages %}
+                <div class="admonition {{cat}}">
+                    <p class="admonition-title">{{categorie}}</p>
+                    <p>{{message}}</p>
+                </div>
+                {% endfor %}
+            {% endwith %}
+        </div>
         <div id="content">
             {% block content %}{% endblock %}
         </div>

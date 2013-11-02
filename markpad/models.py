@@ -2,6 +2,7 @@ import markdown
 import random
 import datetime
 import json
+import os
 from markpad import db, app, logger
 from sqlalchemy.exc import OperationalError
 
@@ -47,12 +48,15 @@ def apply_microcommit(doc, mc):
         logger.info("'action' is not recognized: {0}".format(mc['action']))
     doc.md_content = "\n".join(d)
 
+
+
 class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    url_id = db.Column(db.String, index=True)
+    url_id = db.Column(db.String(app.config.get('URL_ID_LEN', 10)), index=True)
     md_content = db.Column(db.String)
     created_on = db.Column(db.DateTime())
     last_modified_on = db.Column(db.DateTime())
+    
 
     def __repr__(self):
         return '<Document: {0}>'.format(self.url_id)
@@ -80,6 +84,29 @@ class Document(db.Model):
     def update(self, micro_commit):
         apply_microcommit(self, micro_commit)
         self.save()
+
+
+class BinaryDocumentContent(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, index=True)
+    mimetype = db.Column(db.String)
+    if(not app.config.get('IS_SQLITE', False)):
+        data = db.Column(db.LargeBinary)
+    else:
+        data = db.Column(db.String)
+    document_id = db.Column(db.String, index=True)
+    
+    def __repr__(self):
+        return '<BinaryDocumentContent: {0}>'.format(self.name)
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        self = None
 
 
 class ValidationError(Exception):

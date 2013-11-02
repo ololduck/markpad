@@ -14,18 +14,18 @@
     font-size: 1.1em;
     color: #755600; }
 
-.note, .tip, .hint {
+.note, .tip, .hint, .info {
   border-top: 1px solid #8282ff;
   border-bottom: 1px solid #8282ff;
   background-color: #e8e8ff;
   padding-left: 10px;
   margin-top: 5px;
   margin-bottom: 5px; }
-  .note p, .tip p, .hint p {
+  .note p, .tip p, .hint p, .info p {
     margin-top: 2px;
     margin-bottom: 2px;
     color: #4f4fff; }
-  .note .admonition-title, .tip .admonition-title, .hint .admonition-title {
+  .note .admonition-title, .tip .admonition-title, .hint .admonition-title, .info .admonition-title {
     font-weight: bold;
     font-size: 1.1em;
     color: #1c1cff; }
@@ -52,8 +52,7 @@
   font-family: Monospace;
   border-radius: 4px 4px 4px 4px;
   padding-left: 10px;
-  padding-right: 10px;
-  margin-right: 15px; }
+  padding-right: 10px; }
 
 body {
   font-family: Sans-serif;

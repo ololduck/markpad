@@ -37,7 +37,7 @@
     var editor = ace.edit("md-edit");
     editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/markdown");
-    editor.setValue([{% for line in doc.md_content.splitlines() %}"{{line}}", {%endfor%}].join("\n"));
+    editor.setValue([{% for line in doc.md_content.splitlines()%}"{{line|safe|replace('"','\\"')}}", {%endfor%}].join("\n"));
     editor.getSession().on('change', send_microcommit);
 
     function handle_recvd_events(events) {
