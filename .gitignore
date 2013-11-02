@@ -12,3 +12,6 @@ venv
 
 # db files
 *.db
+
+# doc
+_build
